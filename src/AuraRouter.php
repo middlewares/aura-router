@@ -9,6 +9,8 @@ use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Interop\Http\Middleware\DelegateInterface;
 use Aura\Router\RouterContainer;
 use Aura\Router\Route;
+use RuntimeException;
+use ReflectionMethod;
 
 class AuraRouter implements ServerMiddlewareInterface
 {
@@ -110,10 +112,6 @@ class AuraRouter implements ServerMiddlewareInterface
      */
     private function resolveCallable($target, array $args)
     {
-        if (empty($target)) {
-            throw new RuntimeException('No callable provided');
-        }
-
         if ($this->resolver) {
             return $this->resolver->get($target);
         }
@@ -131,11 +129,17 @@ class AuraRouter implements ServerMiddlewareInterface
                 throw new RuntimeException("The class {$class} does not exists");
             }
 
-            $fn = new \ReflectionMethod($class, $method);
+            $refMethod = new ReflectionMethod($class, $method);
 
-            if (!$fn->isStatic()) {
-                $class = new \ReflectionClass($class);
-                $instance = $class->hasMethod('__construct') ? $class->newInstanceArgs($args) : $class->newInstance();
+            if (!$refMethod->isStatic()) {
+                $refClass = $refMethod->getDeclaringClass();
+
+                if ($refClass->hasMethod('__construct')) {
+                    $instance = $refClass->newInstanceArgs($args);
+                } else {
+                    $instance = $refClass->newInstance();
+                }
+
                 $target = [$instance, $method];
             }
         }
