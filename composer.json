@@ -1,0 +1,50 @@
+{
+    "name": "middlewares/aura-router",
+    "type": "library",
+    "description": "Middlware to use Aura.Router",
+    "license": "MIT",
+    "keywords": [
+        "psr-7",
+        "psr-15",
+        "middleware",
+        "server",
+        "http",
+        "router",
+        "aura"
+    ],
+    "homepage": "https://github.com/middlewares/aura-router",
+    "support": {
+        "issues": "https://github.com/middlewares/aura-router/issues"
+    },
+    "require": {
+        "php": "^5.6 || ^7.0",
+        "http-interop/http-middleware": "^0.2",
+        "aura/router": "^3.0",
+        "middlewares/utils": "0.*",
+        "container-interop/container-interop": "^1.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.5",
+        "zendframework/zend-diactoros": "^1.3",
+        "friendsofphp/php-cs-fixer": "^1.12",
+        "squizlabs/php_codesniffer": "^2.7",
+        "mindplay/middleman": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Middlewares\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Middlewares\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": [
+            "phpunit",
+            "phpcs"
+        ],
+        "cs-fix": "php-cs-fixer fix . --fixers=-psr0"
+    }
+}
