@@ -1,7 +1,7 @@
 {
     "name": "middlewares/aura-router",
     "type": "library",
-    "description": "Middlware to use Aura.Router",
+    "description": "Middleware to use Aura.Router",
     "license": "MIT",
     "keywords": [
         "psr-7",
