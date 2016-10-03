@@ -8,9 +8,6 @@ use Interop\Container\ContainerInterface;
 use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Interop\Http\Middleware\DelegateInterface;
 use Aura\Router\RouterContainer;
-use Aura\Router\Route;
-use RuntimeException;
-use ReflectionMethod;
 
 class AuraRouter implements ServerMiddlewareInterface
 {
@@ -97,114 +94,14 @@ class AuraRouter implements ServerMiddlewareInterface
             $request = $request->withAttribute($name, $value);
         }
 
-        return $this->executeCallable($route->handler, $request);
-    }
+        $arguments = array_merge([$request], $this->arguments);
 
-    /**
-     * Resolves the target of the route and returns a callable.
-     *
-     * @param mixed $target
-     * @param array $args
-     *
-     * @throws RuntimeException If the target is not callable
-     *
-     * @return callable
-     */
-    private function resolveCallable($target, array $args)
-    {
         if ($this->resolver) {
-            return $this->resolver->get($target);
+            $callable = $this->resolver->get($route->handler);
+        } else {
+            $callable = Utils\CallableHandler::resolve($route->handler, $arguments);
         }
 
-        if (is_string($target)) {
-            //is a class "classname::method"
-            if (strpos($target, '::') === false) {
-                $class = $target;
-                $method = '__invoke';
-            } else {
-                list($class, $method) = explode('::', $target, 2);
-            }
-
-            if (!class_exists($class)) {
-                throw new RuntimeException("The class {$class} does not exists");
-            }
-
-            $refMethod = new ReflectionMethod($class, $method);
-
-            if (!$refMethod->isStatic()) {
-                $refClass = $refMethod->getDeclaringClass();
-
-                if ($refClass->hasMethod('__construct')) {
-                    $instance = $refClass->newInstanceArgs($args);
-                } else {
-                    $instance = $refClass->newInstance();
-                }
-
-                $target = [$instance, $method];
-            }
-        }
-
-        //if it's callable as is
-        if (is_callable($target)) {
-            return $target;
-        }
-
-        throw new RuntimeException('Invalid callable provided');
-    }
-
-    /**
-     * Execute the callable.
-     *
-     * @param mixed            $target
-     * @param RequestInterface $request
-     *
-     * @return ResponseInterface
-     */
-    private function executeCallable($target, ServerRequestInterface $request)
-    {
-        ob_start();
-        $level = ob_get_level();
-
-        try {
-            $arguments = array_merge([$request], $this->arguments);
-            $return = call_user_func_array($this->resolveCallable($target, $arguments), $arguments);
-
-            if ($return instanceof ResponseInterface) {
-                $response = $return;
-                $return = '';
-            } else {
-                $response = Utils\Factory::createResponse();
-            }
-
-            $return = self::flush($level).$return;
-            $body = $response->getBody();
-
-            if ($return !== '' && $body->isWritable()) {
-                $body->write($return);
-            }
-
-            return $response;
-        } catch (\Exception $exception) {
-            self::flush($level);
-            throw $exception;
-        }
-    }
-
-    /**
-     * Return the output buffer.
-     *
-     * @param int $level
-     *
-     * @return string
-     */
-    private static function flush($level)
-    {
-        $output = '';
-
-        while (ob_get_level() >= $level) {
-            $output .= ob_get_clean();
-        }
-
-        return $output;
+        return Utils\CallableHandler::execute($callable, $arguments);
     }
 }
