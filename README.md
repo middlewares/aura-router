@@ -1,15 +1,13 @@
 # middlewares/aura-router
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
-[![Software License][ico-license]](LICENSE.md)
+[![Software License][ico-license]](LICENSE)
 [![Build Status][ico-travis]][link-travis]
 [![Quality Score][ico-scrutinizer]][link-scrutinizer]
 [![Total Downloads][ico-downloads]][link-downloads]
 [![SensioLabs Insight][ico-sensiolabs]][link-sensiolabs]
 
 Middleware to use [Aura.Router](https://github.com/auraphp/Aura.Router/).
-
-**Note:** This middleware is intended for server side only
 
 ## Requirements
 

@@ -3,8 +3,8 @@
 namespace Middlewares\Tests;
 
 use Middlewares\AuraRouter;
+use Middlewares\Utils\Dispatcher;
 use Zend\Diactoros\ServerRequest;
-use mindplay\middleman\Dispatcher;
 use Aura\Router\RouterContainer;
 
 class AuraRouterTest extends \PHPUnit_Framework_TestCase
