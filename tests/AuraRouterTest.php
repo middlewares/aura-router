@@ -4,7 +4,7 @@ namespace Middlewares\Tests;
 
 use Middlewares\AuraRouter;
 use Middlewares\Utils\Dispatcher;
-use Zend\Diactoros\ServerRequest;
+use Middlewares\Utils\Factory;
 use Aura\Router\RouterContainer;
 
 class AuraRouterTest extends \PHPUnit_Framework_TestCase
@@ -27,17 +27,20 @@ class AuraRouterTest extends \PHPUnit_Framework_TestCase
             (new AuraRouter($router))->arguments('O', 'k'),
         ]);
 
-        $response = $dispatcher->dispatch(new ServerRequest([], [], 'http://domain.com/user/oscarotero/35'));
+        $request = Factory::createServerRequest([], 'GET', 'http://domain.com/user/oscarotero/35');
+        $response = $dispatcher->dispatch($request);
 
         $this->assertInstanceOf('Psr\\Http\\Message\\ResponseInterface', $response);
         $this->assertEquals('Ok', (string) $response->getBody());
 
-        $response = $dispatcher->dispatch(new ServerRequest([], [], 'http://domain.com/user/oscarotero/35', 'post'));
+        $request = Factory::createServerRequest([], 'POST', 'http://domain.com/user/oscarotero/35');
+        $response = $dispatcher->dispatch($request);
 
         $this->assertInstanceOf('Psr\\Http\\Message\\ResponseInterface', $response);
         $this->assertEquals(405, $response->getStatusCode());
 
-        $response = $dispatcher->dispatch(new ServerRequest([], [], 'http://domain.com/not-found'));
+        $request = Factory::createServerRequest([], 'GET', 'http://domain.com/not-found');
+        $response = $dispatcher->dispatch($request);
 
         $this->assertInstanceOf('Psr\\Http\\Message\\ResponseInterface', $response);
         $this->assertEquals(404, $response->getStatusCode());
