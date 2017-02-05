@@ -2,6 +2,9 @@
 
 namespace Middlewares;
 
+use Middlewares\Utils\CallableResolver\CallableResolverInterface;
+use Middlewares\Utils\CallableResolver\ContainerResolver;
+use Middlewares\Utils\CallableResolver\ReflectionResolver;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Interop\Container\ContainerInterface;
@@ -39,13 +42,13 @@ class AuraRouter implements MiddlewareInterface
     /**
      * Set the resolver used to create the controllers.
      *
-     * @param ContainerInterface $resolver
+     * @param ContainerInterface $container
      *
      * @return self
      */
-    public function resolver(ContainerInterface $resolver)
+    public function resolver(ContainerInterface $container)
     {
-        $this->resolver = $resolver;
+        $this->resolver = new ContainerResolver($container);
 
         return $this;
     }
@@ -96,12 +99,22 @@ class AuraRouter implements MiddlewareInterface
 
         $arguments = array_merge([$request], $this->arguments);
 
-        if ($this->resolver) {
-            $callable = $this->resolver->get($route->handler);
-        } else {
-            $callable = Utils\CallableHandler::resolve($route->handler, $arguments);
-        }
+        $callable = $this->getResolver()->resolve($route->handler, $arguments);
 
         return Utils\CallableHandler::execute($callable, $arguments);
+    }
+
+    /**
+     * Return the resolver used for the controllers
+     *
+     * @return CallableResolverInterface
+     */
+    private function getResolver()
+    {
+        if (!isset($this->resolver)) {
+            $this->resolver = new ReflectionResolver();
+        }
+
+        return $this->resolver;
     }
 }
