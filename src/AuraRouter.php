@@ -25,7 +25,7 @@ class AuraRouter implements MiddlewareInterface
     private $arguments = [];
 
     /**
-     * @var ContainerInterface Used to resolve the controllers
+     * @var ContainerResolver|null Used to resolve the controllers
      */
     private $resolver;
 
