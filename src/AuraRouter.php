@@ -2,6 +2,8 @@
 
 namespace Middlewares;
 
+use Middlewares\Utils\CallableHandler;
+use Middlewares\Utils\Factory;
 use Middlewares\Utils\CallableResolver\CallableResolverInterface;
 use Middlewares\Utils\CallableResolver\ContainerResolver;
 use Middlewares\Utils\CallableResolver\ReflectionResolver;
@@ -83,13 +85,13 @@ class AuraRouter implements MiddlewareInterface
 
             switch ($failedRoute->failedRule) {
                 case 'Aura\Router\Rule\Allows':
-                    return Utils\Factory::createResponse(405); // 405 METHOD NOT ALLOWED
+                    return Factory::createResponse(405); // 405 METHOD NOT ALLOWED
 
                 case 'Aura\Router\Rule\Accepts':
-                    return Utils\Factory::createResponse(406); // 406 NOT ACCEPTABLE
+                    return Factory::createResponse(406); // 406 NOT ACCEPTABLE
 
                 default:
-                    return Utils\Factory::createResponse(404); // 404 NOT FOUND
+                    return Factory::createResponse(404); // 404 NOT FOUND
             }
         }
 
@@ -101,7 +103,7 @@ class AuraRouter implements MiddlewareInterface
 
         $callable = $this->getResolver()->resolve($route->handler, $arguments);
 
-        return Utils\CallableHandler::execute($callable, $arguments);
+        return CallableHandler::execute($callable, $arguments);
     }
 
     /**
