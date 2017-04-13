@@ -20,13 +20,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.5.0] - 2017-02-27
 
-## Changed
+### Changed
 
 * Replaced `container-interop` by `psr/container`
 
 ## [0.4.0] - 2017-02-05
 
-## Changed
+### Changed
 
 * Updated to `middlewares/utils#~0.9`
 * Improved route target resolution
