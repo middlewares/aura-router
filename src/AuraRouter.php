@@ -44,7 +44,7 @@ class AuraRouter implements MiddlewareInterface
     /**
      * Set the resolver used to create the controllers.
      *
-     * @param ContainerInterface $container
+     * @param CallableResolverInterface $resolver
      *
      * @return self
      */
