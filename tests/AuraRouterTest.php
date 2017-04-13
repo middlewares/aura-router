@@ -30,19 +30,17 @@ class AuraRouterTest extends \PHPUnit_Framework_TestCase
         $request = Factory::createServerRequest([], 'GET', 'http://domain.com/user/oscarotero/35');
         $response = $dispatcher->dispatch($request);
 
-        $this->assertInstanceOf('Psr\\Http\\Message\\ResponseInterface', $response);
         $this->assertEquals('Ok', (string) $response->getBody());
 
         $request = Factory::createServerRequest([], 'POST', 'http://domain.com/user/oscarotero/35');
         $response = $dispatcher->dispatch($request);
 
-        $this->assertInstanceOf('Psr\\Http\\Message\\ResponseInterface', $response);
         $this->assertEquals(405, $response->getStatusCode());
+        $this->assertEquals('GET', $response->getHeaderLine('Allow'));
 
         $request = Factory::createServerRequest([], 'GET', 'http://domain.com/not-found');
         $response = $dispatcher->dispatch($request);
 
-        $this->assertInstanceOf('Psr\\Http\\Message\\ResponseInterface', $response);
         $this->assertEquals(404, $response->getStatusCode());
     }
 }

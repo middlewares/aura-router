@@ -48,11 +48,23 @@ class AuraRouter implements MiddlewareInterface
      *
      * @return self
      */
-    public function resolver(ContainerInterface $container)
+    public function resolver(CallableResolverInterface $resolver)
     {
-        $this->resolver = new ContainerResolver($container);
+        $this->resolver = $resolver;
 
         return $this;
+    }
+
+    /**
+     * Set the container used to create the controllers.
+     *
+     * @param ContainerInterface $container
+     *
+     * @return self
+     */
+    public function container(ContainerInterface $container)
+    {
+        return $this->resolver(new ContainerResolver($container));
     }
 
     /**
@@ -85,7 +97,7 @@ class AuraRouter implements MiddlewareInterface
 
             switch ($failedRoute->failedRule) {
                 case 'Aura\Router\Rule\Allows':
-                    return Factory::createResponse(405); // 405 METHOD NOT ALLOWED
+                    return Factory::createResponse(405)->withHeader('Allow', implode(', ', $failedRoute->allows)); // 405 METHOD NOT ALLOWED
 
                 case 'Aura\Router\Rule\Accepts':
                     return Factory::createResponse(406); // 406 NOT ACCEPTABLE

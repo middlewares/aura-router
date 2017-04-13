@@ -4,20 +4,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 0.5.0 - 2017-02-27
+## [0.6.0] - 2017-04-13
+
+### Changed
+
+* The option `resolver()` accepts any instance of `Middlewares\Utils\CallableResolver\CallableResolverInterface`.
+
+### Added
+
+* New option `container()` that works as a shortcut to use a PSR-11 container as a resolver.
+
+### Fixed
+
+* The `405` response includes an `Allow` header with the allowed methods for the request.
+
+## [0.5.0] - 2017-02-27
 
 ## Changed
 
 * Replaced `container-interop` by `psr/container`
 
-## 0.4.0 - 2017-02-05
+## [0.4.0] - 2017-02-05
 
 ## Changed
 
 * Updated to `middlewares/utils#~0.9`
 * Improved route target resolution
 
-## 0.3.0 - 2016-12-26
+## [0.3.0] - 2016-12-26
 
 ### Changed
 
@@ -25,13 +39,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * Updated to `http-interop/http-middleware#0.4`
 * Updated `friendsofphp/php-cs-fixer#2.0`
 
-## 0.2.0 - 2016-11-22
+## [0.2.0] - 2016-11-22
 
 ### Changed
 
 * Updated to `http-interop/http-middleware#0.3`
 
-## 0.1.1 - 2016-10-03
+## [0.1.1] - 2016-10-03
 
 ### Fixed
 
@@ -41,3 +55,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 First version
 
+[0.6.0]: https://github.com/middlewares/aura-router/compare/v0.5.0...v0.6.0
+[0.5.0]: https://github.com/middlewares/aura-router/compare/v0.4.0...v0.5.0
+[0.4.0]: https://github.com/middlewares/aura-router/compare/v0.3.0...v0.4.0
+[0.3.0]: https://github.com/middlewares/aura-router/compare/v0.2.0...v0.3.0
+[0.2.0]: https://github.com/middlewares/aura-router/compare/v0.1.1...v0.2.0
+[0.1.1]: https://github.com/middlewares/aura-router/compare/v0.1.0...v0.1.1
