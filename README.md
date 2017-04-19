@@ -7,7 +7,7 @@
 [![Total Downloads][ico-downloads]][link-downloads]
 [![SensioLabs Insight][ico-sensiolabs]][link-sensiolabs]
 
-Middleware to use [Aura.Router](https://github.com/auraphp/Aura.Router/).
+Middleware to use [Aura.Router](https://github.com/auraphp/Aura.Router/) and store the route handler in a request attribute.
 
 ## Requirements
 
@@ -25,6 +25,8 @@ composer require middlewares/aura-router
 ```
 
 ## Example
+
+In this example, we are using [middleware/request-handler](https://github.com/middlewares/request-handler) to execute the route handler:
 
 ```php
 //Create the router
@@ -48,19 +50,14 @@ $map->get('hello', '/hello/{name}', function ($request) {
 });
 
 $dispatcher = new Dispatcher([
-	new Middlewares\AuraRouter($router)
+	new Middlewares\AuraRouter($router),
+    new Middlewares\RequestHandler()
 ]);
 
 $response = $dispatcher->dispatch(new ServerRequest('/hello/world'));
 ```
 
-**Aura.Router** allows to define anything as the router handler (a closure, callback, action object, controller class, etc). By default, it's resolved in the following way:
-
-* If it's a string similar to `Namespace\Class::method`, and the method is not static, create a instance of `Namespace\Class` and call the method.
-* If the string is the name of a existing class (like: `Namespace\Class`) and contains the method `__invoke`, create a instance and execute that method.
-* Otherwise, treat it as a callable.
-
-If you want to change this behaviour, use a container implementing the [PSR-11 spec](https://github.com/php-fig/container) to return the route callable.
+**Aura.Router** allows to define anything as the router handler (a closure, callback, action object, controller class, etc). The middleware will store this handler in a request attribute.
 
 ## Options
 
@@ -68,28 +65,9 @@ If you want to change this behaviour, use a container implementing the [PSR-11 s
 
 The router instance to use. 
 
-#### `resolver(Psr\Container\ContainerInterface $resolver)`
+#### `attribute(string $attribute)`
 
-To use a container implementing [PSR-11 interface](https://github.com/php-fig/container) to resolve the route handlers.
-
-#### `arguments(...$args)`
-
-Extra arguments to pass to the controller. This is useful to inject, for example a service container:
-
-```php
-$map->get('post', '/posts/{id}', function ($request, $app) {
-    $id = $request->getAttribute('id');
-    $post = $app->get('database')->select($id);
-    
-    return $app->get('templates')->render($post);
-});
-
-$dispatcher = new Dispatcher([
-    (new Middlewares\AuraRouter($router))
-        ->arguments($app)
-]);
-
-```
+The attribute name used to store the handler in the server request. The default attribute name is `request-handler`.
 
 ---
 
