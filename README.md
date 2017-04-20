@@ -50,7 +50,7 @@ $map->get('hello', '/hello/{name}', function ($request) {
 });
 
 $dispatcher = new Dispatcher([
-	new Middlewares\AuraRouter($router),
+    new Middlewares\AuraRouter($router),
     new Middlewares\RequestHandler()
 ]);
 
