@@ -2,12 +2,12 @@
 
 namespace Middlewares;
 
-use Middlewares\Utils\Factory;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
-use Interop\Http\ServerMiddleware\DelegateInterface;
 use Aura\Router\RouterContainer;
+use Interop\Http\ServerMiddleware\DelegateInterface;
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
+use Middlewares\Utils\Factory;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class AuraRouter implements MiddlewareInterface
 {
@@ -63,10 +63,8 @@ class AuraRouter implements MiddlewareInterface
             switch ($failedRoute->failedRule) {
                 case 'Aura\Router\Rule\Allows':
                     return Factory::createResponse(405)->withHeader('Allow', implode(', ', $failedRoute->allows)); // 405 METHOD NOT ALLOWED
-
                 case 'Aura\Router\Rule\Accepts':
                     return Factory::createResponse(406); // 406 NOT ACCEPTABLE
-
                 default:
                     return Factory::createResponse(404); // 404 NOT FOUND
             }

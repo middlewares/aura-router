@@ -2,11 +2,11 @@
 
 namespace Middlewares\Tests;
 
-use PHPUnit\Framework\TestCase;
+use Aura\Router\RouterContainer;
 use Middlewares\AuraRouter;
 use Middlewares\Utils\Dispatcher;
 use Middlewares\Utils\Factory;
-use Aura\Router\RouterContainer;
+use PHPUnit\Framework\TestCase;
 
 class AuraRouterTest extends TestCase
 {
@@ -56,7 +56,7 @@ class AuraRouterTest extends TestCase
             new AuraRouter($router),
             function ($request) {
                 echo $request->getAttribute('request-handler');
-            }
+            },
         ], $request);
 
         $this->assertEquals('listUsers', (string) $response->getBody());
@@ -75,7 +75,7 @@ class AuraRouterTest extends TestCase
             (new AuraRouter($router))->attribute('handler'),
             function ($request) {
                 echo $request->getAttribute('handler');
-            }
+            },
         ], $request);
 
         $this->assertEquals('listUsers', (string) $response->getBody());
