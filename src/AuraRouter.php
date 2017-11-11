@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace Middlewares;
 
@@ -23,8 +24,6 @@ class AuraRouter implements MiddlewareInterface
 
     /**
      * Set the RouterContainer instance.
-     *
-     * @param RouterContainer $router
      */
     public function __construct(RouterContainer $router)
     {
@@ -33,12 +32,8 @@ class AuraRouter implements MiddlewareInterface
 
     /**
      * Set the attribute name to store handler reference.
-     *
-     * @param string $attribute
-     *
-     * @return self
      */
-    public function attribute($attribute)
+    public function attribute(string $attribute): self
     {
         $this->attribute = $attribute;
         return $this;
@@ -46,13 +41,8 @@ class AuraRouter implements MiddlewareInterface
 
     /**
      * Process a server request and return a response.
-     *
-     * @param ServerRequestInterface  $request
-     * @param RequestHandlerInterface $handler
-     *
-     * @return ResponseInterface
      */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler)
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $matcher = $this->router->getMatcher();
         $route = $matcher->match($request);
