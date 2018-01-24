@@ -66,7 +66,7 @@ The router instance to use.
 
 #### `attribute(string $attribute)`
 
-The attribute name used to store the handler in the server request. The default attribute name is `request-handler`.
+The name of the server request attribute used to save the handler. The default value is `request-handler`.
 
 ---
 
