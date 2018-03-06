@@ -55,8 +55,11 @@ class AuraRouter implements MiddlewareInterface
                     return Factory::createResponse(405)->withHeader('Allow', implode(', ', $failedRoute->allows)); // 405 METHOD NOT ALLOWED
                 case 'Aura\Router\Rule\Accepts':
                     return Factory::createResponse(406); // 406 NOT ACCEPTABLE
-                default:
+                case 'Aura\Router\Rule\Host':
+                case 'Aura\Router\Rule\Path':
                     return Factory::createResponse(404); // 404 NOT FOUND
+                default:
+                    return Factory::createResponse(500); // 500 INTERNAL SERVER ERROR
             }
         }
 
