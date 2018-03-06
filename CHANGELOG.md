@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.1] - 2018-02-06
+
+### Fixed
+
+- Return a 500 response, if the failed route rule is different to 404, 405 or 406. [#2](https://github.com/middlewares/aura-router/pull/2)
+
 ## [1.0.0] - 2018-01-24
 
 ### Added
@@ -96,6 +102,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 First version
 
+[1.0.1]: https://github.com/middlewares/aura-router/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/middlewares/aura-router/compare/v0.9.0...v1.0.0
 [0.9.0]: https://github.com/middlewares/aura-router/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/middlewares/aura-router/compare/v0.7.0...v0.8.0
