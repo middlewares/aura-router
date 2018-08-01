@@ -68,6 +68,10 @@ The router instance to use.
 
 The name of the server request attribute used to save the handler. The default value is `request-handler`.
 
+#### `responseFactory(Psr\Http\Message\ResponseFactoryInterface $responseFactory)`
+
+A PSR-17 factory to create the responses returned on error (`404`, `405`, `406`, etc).
+
 ---
 
 Please see [CHANGELOG](CHANGELOG.md) for more information about recent changes and [CONTRIBUTING](CONTRIBUTING.md) for contributing details.

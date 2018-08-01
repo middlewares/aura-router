@@ -7,6 +7,8 @@ use Aura\Router\RouterContainer;
 use Middlewares\AuraRouter;
 use Middlewares\Utils\Dispatcher;
 use Middlewares\Utils\Factory;
+use Middlewares\Utils\Factory\GuzzleFactory;
+use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use PHPUnit\Framework\TestCase;
 
 class AuraRouterTest extends TestCase
@@ -22,10 +24,28 @@ class AuraRouterTest extends TestCase
             [
                 new AuraRouter($router),
             ],
-            Factory::createServerRequest([], 'GET', '/posts')
+            Factory::createServerRequest('GET', '/posts')
         );
 
         $this->assertEquals(404, $response->getStatusCode());
+    }
+
+    public function testResponseFactory()
+    {
+        $router = new RouterContainer();
+        $map = $router->getMap();
+
+        $map->get('list', '/users', 'listUsers');
+
+        $response = Dispatcher::run(
+            [
+                (new AuraRouter($router))->responseFactory(new GuzzleFactory),
+            ],
+            Factory::createServerRequest('GET', '/posts')
+        );
+
+        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertInstanceOf(GuzzleResponse::class, $response);
     }
 
     public function testAuraRouterNotAllowed()
@@ -39,7 +59,7 @@ class AuraRouterTest extends TestCase
             [
                 new AuraRouter($router),
             ],
-            Factory::createServerRequest([], 'DELETE', '/users')
+            Factory::createServerRequest('DELETE', '/users')
         );
 
         $this->assertEquals(405, $response->getStatusCode());
@@ -57,7 +77,7 @@ class AuraRouterTest extends TestCase
             [
                 new AuraRouter($router),
             ],
-            Factory::createServerRequest([], 'GET', '/users')->withHeader('Accept', 'text/html')
+            Factory::createServerRequest('GET', '/users')->withHeader('Accept', 'text/html')
         );
 
         $this->assertEquals(406, $response->getStatusCode());
@@ -77,7 +97,7 @@ class AuraRouterTest extends TestCase
                     echo $request->getAttribute('request-handler');
                 },
             ],
-            Factory::createServerRequest([], 'GET', '/users')
+            Factory::createServerRequest('GET', '/users')
         );
 
         $this->assertEquals('listUsers', (string) $response->getBody());
@@ -97,7 +117,7 @@ class AuraRouterTest extends TestCase
                     echo $request->getAttribute('handler');
                 },
             ],
-            Factory::createServerRequest([], 'GET', '/users')
+            Factory::createServerRequest('GET', '/users')
         );
 
         $this->assertEquals('listUsers', (string) $response->getBody());
@@ -117,7 +137,7 @@ class AuraRouterTest extends TestCase
                     echo $request->getAttribute('name');
                 },
             ],
-            Factory::createServerRequest([], 'GET', '/users/alice')
+            Factory::createServerRequest('GET', '/users/alice')
         );
 
         $this->assertEquals('alice', (string) $response->getBody());
