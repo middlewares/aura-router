@@ -4,11 +4,11 @@ declare(strict_types = 1);
 namespace Middlewares\Tests;
 
 use Aura\Router\RouterContainer;
+use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use Middlewares\AuraRouter;
 use Middlewares\Utils\Dispatcher;
 use Middlewares\Utils\Factory;
 use Middlewares\Utils\Factory\GuzzleFactory;
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use PHPUnit\Framework\TestCase;
 
 class AuraRouterTest extends TestCase
@@ -39,7 +39,7 @@ class AuraRouterTest extends TestCase
 
         $response = Dispatcher::run(
             [
-                (new AuraRouter($router))->responseFactory(new GuzzleFactory),
+                (new AuraRouter($router))->responseFactory(new GuzzleFactory()),
             ],
             Factory::createServerRequest('GET', '/posts')
         );
