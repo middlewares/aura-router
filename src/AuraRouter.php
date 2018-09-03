@@ -12,8 +12,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class AuraRouter implements MiddlewareInterface
 {
-    use HasResponseFactory;
-
     /**
      * @var RouterContainer The router container
      */
@@ -25,11 +23,17 @@ class AuraRouter implements MiddlewareInterface
     private $attribute = 'request-handler';
 
     /**
+     * @var FailResponderInterface Responder for failed to match route
+     */
+    private $fail;
+
+    /**
      * Set the RouterContainer instance.
      */
-    public function __construct(RouterContainer $router)
+    public function __construct(RouterContainer $router, AuraRouter\FailResponderInterface $fail = null)
     {
         $this->router = $router;
+        $this->fail = $fail ?: new AuraRouter\FailResponder();
     }
 
     /**
@@ -51,19 +55,7 @@ class AuraRouter implements MiddlewareInterface
 
         if (!$route) {
             $failedRoute = $matcher->getFailedRoute();
-
-            switch ($failedRoute->failedRule) {
-                case 'Aura\Router\Rule\Allows':
-                    return $this->createResponse(405)
-                        ->withHeader('Allow', implode(', ', $failedRoute->allows)); // 405 METHOD NOT ALLOWED
-                case 'Aura\Router\Rule\Accepts':
-                    return $this->createResponse(406); // 406 NOT ACCEPTABLE
-                case 'Aura\Router\Rule\Host':
-                case 'Aura\Router\Rule\Path':
-                    return $this->createResponse(404); // 404 NOT FOUND
-                default:
-                    return $this->createResponse(500); // 500 INTERNAL SERVER ERROR
-            }
+            return $this->fail->respond($failedRoute);
         }
 
         foreach ($route->attributes as $name => $value) {

@@ -6,6 +6,7 @@ namespace Middlewares\Tests;
 use Aura\Router\RouterContainer;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use Middlewares\AuraRouter;
+use Middlewares\AuraRouter\FailResponder;
 use Middlewares\Utils\Dispatcher;
 use Middlewares\Utils\Factory;
 use Middlewares\Utils\Factory\GuzzleFactory;
@@ -34,12 +35,13 @@ class AuraRouterTest extends TestCase
     {
         $router = new RouterContainer();
         $map = $router->getMap();
+        $fail = (new FailResponder())->responseFactory(new GuzzleFactory());
 
         $map->get('list', '/users', 'listUsers');
 
         $response = Dispatcher::run(
             [
-                (new AuraRouter($router))->responseFactory(new GuzzleFactory()),
+                (new AuraRouter($router, $fail)),
             ],
             Factory::createServerRequest('GET', '/posts')
         );
