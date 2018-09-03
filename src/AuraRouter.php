@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Middlewares;
 
-use Aura\Router\RouterContainer;
+use Aura\Router\Matcher;
 use Middlewares\Utils\Traits\HasResponseFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -15,9 +15,9 @@ class AuraRouter implements MiddlewareInterface
     use HasResponseFactory;
 
     /**
-     * @var RouterContainer The router container
+     * @var Matcher The route matcher
      */
-    private $router;
+    private $matcher;
 
     /**
      * @var string Attribute name for handler reference
@@ -25,11 +25,11 @@ class AuraRouter implements MiddlewareInterface
     private $attribute = 'request-handler';
 
     /**
-     * Set the RouterContainer instance.
+     * Set the route matcher instance.
      */
-    public function __construct(RouterContainer $router)
+    public function __construct(Matcher $matcher)
     {
-        $this->router = $router;
+        $this->matcher = $matcher;
     }
 
     /**
@@ -46,11 +46,10 @@ class AuraRouter implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $matcher = $this->router->getMatcher();
-        $route = $matcher->match($request);
+        $route = $this->matcher->match($request);
 
         if (!$route) {
-            $failedRoute = $matcher->getFailedRoute();
+            $failedRoute = $this->matcher->getFailedRoute();
 
             switch ($failedRoute->failedRule) {
                 case 'Aura\Router\Rule\Allows':

@@ -17,12 +17,13 @@ class AuraRouterTest extends TestCase
     {
         $router = new RouterContainer();
         $map = $router->getMap();
+        $matcher = $router->getMatcher();
 
         $map->get('list', '/users', 'listUsers');
 
         $response = Dispatcher::run(
             [
-                new AuraRouter($router),
+                new AuraRouter($matcher),
             ],
             Factory::createServerRequest('GET', '/posts')
         );
@@ -34,12 +35,13 @@ class AuraRouterTest extends TestCase
     {
         $router = new RouterContainer();
         $map = $router->getMap();
+        $matcher = $router->getMatcher();
 
         $map->get('list', '/users', 'listUsers');
 
         $response = Dispatcher::run(
             [
-                (new AuraRouter($router))->responseFactory(new GuzzleFactory()),
+                (new AuraRouter($matcher))->responseFactory(new GuzzleFactory()),
             ],
             Factory::createServerRequest('GET', '/posts')
         );
@@ -52,12 +54,13 @@ class AuraRouterTest extends TestCase
     {
         $router = new RouterContainer();
         $map = $router->getMap();
+        $matcher = $router->getMatcher();
 
         $map->get('list', '/users', 'listUsers')->allows(['POST']);
 
         $response = Dispatcher::run(
             [
-                new AuraRouter($router),
+                new AuraRouter($matcher),
             ],
             Factory::createServerRequest('DELETE', '/users')
         );
@@ -70,12 +73,13 @@ class AuraRouterTest extends TestCase
     {
         $router = new RouterContainer();
         $map = $router->getMap();
+        $matcher = $router->getMatcher();
 
         $map->get('list', '/users', 'listUsers')->accepts(['application/json']);
 
         $response = Dispatcher::run(
             [
-                new AuraRouter($router),
+                new AuraRouter($matcher),
             ],
             Factory::createServerRequest('GET', '/users')->withHeader('Accept', 'text/html')
         );
@@ -87,12 +91,13 @@ class AuraRouterTest extends TestCase
     {
         $router = new RouterContainer();
         $map = $router->getMap();
+        $matcher = $router->getMatcher();
 
         $map->get('list', '/users', 'listUsers');
 
         $response = Dispatcher::run(
             [
-                new AuraRouter($router),
+                new AuraRouter($matcher),
                 function ($request) {
                     echo $request->getAttribute('request-handler');
                 },
@@ -107,12 +112,13 @@ class AuraRouterTest extends TestCase
     {
         $router = new RouterContainer();
         $map = $router->getMap();
+        $matcher = $router->getMatcher();
 
         $map->get('list', '/users', 'listUsers');
 
         $response = Dispatcher::run(
             [
-                (new AuraRouter($router))->attribute('handler'),
+                (new AuraRouter($matcher))->attribute('handler'),
                 function ($request) {
                     echo $request->getAttribute('handler');
                 },
@@ -127,12 +133,13 @@ class AuraRouterTest extends TestCase
     {
         $router = new RouterContainer();
         $map = $router->getMap();
+        $matcher = $router->getMatcher();
 
         $map->get('list', '/users/{name}', 'getUser');
 
         $response = Dispatcher::run(
             [
-                new AuraRouter($router),
+                new AuraRouter($matcher),
                 function ($request) {
                     echo $request->getAttribute('name');
                 },
