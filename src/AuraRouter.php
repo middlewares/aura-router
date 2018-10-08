@@ -64,14 +64,14 @@ class AuraRouter implements MiddlewareInterface
                 default:
                     return $this->createResponse(500); // 500 INTERNAL SERVER ERROR
             }
+        } else {
+            foreach ($route->attributes as $name => $value) {
+                $request = $request->withAttribute($name, $value);
+            }
+
+            $request = $request->withAttribute($this->attribute, $route->handler);
+
+            return $handler->handle($request);
         }
-
-        foreach ($route->attributes as $name => $value) {
-            $request = $request->withAttribute($name, $value);
-        }
-
-        $request = $request->withAttribute($this->attribute, $route->handler);
-
-        return $handler->handle($request);
     }
 }
