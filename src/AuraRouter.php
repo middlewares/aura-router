@@ -61,9 +61,9 @@ class AuraRouter implements MiddlewareInterface
                 case 'Aura\Router\Rule\Host':
                 case 'Aura\Router\Rule\Path':
                     return $this->createResponse(404); // 404 NOT FOUND
-                default:
-                    return $this->createResponse(500); // 500 INTERNAL SERVER ERROR
             }
+
+            return $this->createResponse(500); // 500 INTERNAL SERVER ERROR
         }
 
         foreach ($route->attributes as $name => $value) {
