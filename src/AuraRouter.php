@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Middlewares;
 
 use Aura\Router\RouterContainer;
+use Aura\Router\Route;
 use Middlewares\Utils\Traits\HasResponseFactory;
 use Middlewares\Utils\Factory;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -73,7 +74,8 @@ class AuraRouter implements MiddlewareInterface
             $request = $request->withAttribute($name, $value);
         }
 
-        $request = $request->withAttribute($this->attribute, $route->handler);
+        $request = $request->withAttribute($this->attribute, $route->handler)
+            ->withAttribute(Route::class, $route);
 
         return $handler->handle($request);
     }
