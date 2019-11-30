@@ -71,7 +71,7 @@ class AuraRouter implements MiddlewareInterface
                         ->createResponse(404); // 404 NOT FOUND
             }
 
-            return $this->createResponse(500); // 500 INTERNAL SERVER ERROR
+            return $this->responseFactory->createResponse(500); // 500 INTERNAL SERVER ERROR
         }
 
         foreach ($route->attributes as $name => $value) {
