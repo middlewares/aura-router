@@ -4,11 +4,11 @@ declare(strict_types = 1);
 namespace Middlewares\Tests;
 
 use Aura\Router\RouterContainer;
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use Middlewares\AuraRouter;
 use Middlewares\Utils\Dispatcher;
 use Middlewares\Utils\Factory;
-use Middlewares\Utils\Factory\GuzzleFactory;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Nyholm\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 
 class AuraRouterTest extends TestCase
@@ -39,13 +39,13 @@ class AuraRouterTest extends TestCase
 
         $response = Dispatcher::run(
             [
-                (new AuraRouter($router))->responseFactory(new GuzzleFactory()),
+                new AuraRouter($router, new Psr17Factory()),
             ],
             Factory::createServerRequest('GET', '/posts')
         );
 
         $this->assertEquals(404, $response->getStatusCode());
-        $this->assertInstanceOf(GuzzleResponse::class, $response);
+        $this->assertInstanceOf(Response::class, $response);
     }
 
     public function testAuraRouterNotAllowed()
