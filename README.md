@@ -2,17 +2,15 @@
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE)
-[![Build Status][ico-travis]][link-travis]
-[![Quality Score][ico-scrutinizer]][link-scrutinizer]
+![Testing][ico-ga]
 [![Total Downloads][ico-downloads]][link-downloads]
-[![SensioLabs Insight][ico-sensiolabs]][link-sensiolabs]
 
 Middleware to use [Aura.Router](https://github.com/auraphp/Aura.Router/) and store the route handler in a request attribute.
 
 ## Requirements
 
-* PHP >= 7.0
-* A [PSR-7](https://packagist.org/providers/psr/http-message-implementation) http message implementation ([Diactoros](https://github.com/zendframework/zend-diactoros), [Guzzle](https://github.com/guzzle/psr7), [Slim](https://github.com/slimphp/Slim), etc...)
+* PHP >= 7.2
+* A [PSR-7 http library](https://github.com/middlewares/awesome-psr15-middlewares#psr-7-implementations)
 * A [PSR-15 middleware dispatcher](https://github.com/middlewares/awesome-psr15-middlewares#dispatcher)
 
 ## Installation
@@ -58,19 +56,38 @@ $response = $dispatcher->dispatch(new ServerRequest('/hello/world'));
 
 **Aura.Router** allows to define anything as the router handler (a closure, callback, action object, controller class, etc). The middleware will store this handler in a request attribute.
 
-## Options
+## Usage
 
-#### `__construct(Aura\Router\RouterContainer $router)`
+Create the middleware with a `Aura\Router\RouterContainer` instance:
 
-The router instance to use. 
+```php
+$routerContainer = new Aura\Router\RouterContainer();
 
-#### `attribute(string $attribute)`
+$route = new Middlewares\AuraRouter($routerContainer);
+```
+
+Optionally, you can provide a `Psr\Http\Message\ResponseFactoryInterface` as the second argument, that will be used to create the error responses (`404`, `405` or `406`). If it's not defined, [Middleware\Utils\Factory](https://github.com/middlewares/utils#factory) will be used to detect it automatically.
+
+```php
+$routerContainer = new Aura\Router\RouterContainer();
+$responseFactory = new MyOwnResponseFactory();
+
+$route = new Middlewares\AuraRouter($routerContainer, $responseFactory);
+```
+
+### attribute
 
 The name of the server request attribute used to save the handler. The default value is `request-handler`.
 
-#### `responseFactory(Psr\Http\Message\ResponseFactoryInterface $responseFactory)`
+```php
+$dispatcher = new Dispatcher([
+    //Save the route handler in an attribute called "route"
+    (new Middlewares\AuraRouter($routerContainer))->attribute('route'),
 
-A PSR-17 factory to create the error responses (`404`, `405`, `406`, etc).
+    //Execute the route handler
+    (new Middlewares\RequestHandler())->attribute('route')
+]);
+```
 
 ---
 
@@ -80,13 +97,8 @@ The MIT License (MIT). Please see [LICENSE](LICENSE) for more information.
 
 [ico-version]: https://img.shields.io/packagist/v/middlewares/aura-router.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/middlewares/aura-router/master.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/g/middlewares/aura-router.svg?style=flat-square
+[ico-ga]: https://github.com/middlewares/aura-router/workflows/testing/badge.svg
 [ico-downloads]: https://img.shields.io/packagist/dt/middlewares/aura-router.svg?style=flat-square
-[ico-sensiolabs]: https://img.shields.io/sensiolabs/i/3409cd4b-666d-4d3d-ba3b-1861f3b610f1.svg?style=flat-square
 
 [link-packagist]: https://packagist.org/packages/middlewares/aura-router
-[link-travis]: https://travis-ci.org/middlewares/aura-router
-[link-scrutinizer]: https://scrutinizer-ci.com/g/middlewares/aura-router
 [link-downloads]: https://packagist.org/packages/middlewares/aura-router
-[link-sensiolabs]: https://insight.sensiolabs.com/projects/3409cd4b-666d-4d3d-ba3b-1861f3b610f1

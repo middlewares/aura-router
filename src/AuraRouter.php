@@ -4,7 +4,8 @@ declare(strict_types = 1);
 namespace Middlewares;
 
 use Aura\Router\RouterContainer;
-use Middlewares\Utils\Traits\HasResponseFactory;
+use Middlewares\Utils\Factory;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -12,8 +13,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class AuraRouter implements MiddlewareInterface
 {
-    use HasResponseFactory;
-
     /**
      * @var RouterContainer The router container
      */
@@ -25,11 +24,17 @@ class AuraRouter implements MiddlewareInterface
     private $attribute = 'request-handler';
 
     /**
+     * @var ResponseFactoryInterface
+     */
+    private $responseFactory;
+
+    /**
      * Set the RouterContainer instance.
      */
-    public function __construct(RouterContainer $router)
+    public function __construct(RouterContainer $router, ResponseFactoryInterface $responseFactory = null)
     {
         $this->router = $router;
+        $this->responseFactory = $responseFactory ?: Factory::getResponseFactory();
     }
 
     /**
@@ -54,24 +59,23 @@ class AuraRouter implements MiddlewareInterface
 
             switch ($failedRoute->failedRule) {
                 case 'Aura\Router\Rule\Allows':
-                    return $this->createResponse(405)
+                    return $this->responseFactory
+                        ->createResponse(405)
                         ->withHeader('Allow', implode(', ', $failedRoute->allows)); // 405 METHOD NOT ALLOWED
                 case 'Aura\Router\Rule\Accepts':
-                    return $this->createResponse(406); // 406 NOT ACCEPTABLE
+                    return $this->responseFactory
+                        ->createResponse(406); // 406 NOT ACCEPTABLE
                 case 'Aura\Router\Rule\Host':
                 case 'Aura\Router\Rule\Path':
-                    return $this->createResponse(404); // 404 NOT FOUND
-                default:
-                    return $this->createResponse(500); // 500 INTERNAL SERVER ERROR
+                    return $this->responseFactory
+                        ->createResponse(404); // 404 NOT FOUND
             }
         } else {
             foreach ($route->attributes as $name => $value) {
                 $request = $request->withAttribute($name, $value);
             }
 
-            $request = $request->withAttribute($this->attribute, $route->handler);
-
-            return $handler->handle($request);
+            return $this->responseFactory->createResponse(500); // 500 INTERNAL SERVER ERROR
         }
     }
 }
