@@ -31,7 +31,7 @@ class AuraRouter implements MiddlewareInterface
     /**
      * Set the RouterContainer instance.
      */
-    public function __construct(RouterContainer $router, ResponseFactoryInterface $responseFactory = null)
+    public function __construct(RouterContainer $router, ?ResponseFactoryInterface $responseFactory = null)
     {
         $this->router = $router;
         $this->responseFactory = $responseFactory ?: Factory::getResponseFactory();
