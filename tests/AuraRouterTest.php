@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 
 class AuraRouterTest extends TestCase
 {
-    public function testAuraRouterNotFound()
+    public function testAuraRouterNotFound(): void
     {
         $router = new RouterContainer();
         $map = $router->getMap();
@@ -30,7 +30,7 @@ class AuraRouterTest extends TestCase
         $this->assertEquals(404, $response->getStatusCode());
     }
 
-    public function testResponseFactory()
+    public function testResponseFactory(): void
     {
         $router = new RouterContainer();
         $map = $router->getMap();
@@ -48,7 +48,7 @@ class AuraRouterTest extends TestCase
         $this->assertInstanceOf(Response::class, $response);
     }
 
-    public function testAuraRouterNotAllowed()
+    public function testAuraRouterNotAllowed(): void
     {
         $router = new RouterContainer();
         $map = $router->getMap();
@@ -66,7 +66,7 @@ class AuraRouterTest extends TestCase
         $this->assertEquals('GET, POST', $response->getHeaderLine('Allow'));
     }
 
-    public function testAuraRouterNotAccepted()
+    public function testAuraRouterNotAccepted(): void
     {
         $router = new RouterContainer();
         $map = $router->getMap();
@@ -83,7 +83,7 @@ class AuraRouterTest extends TestCase
         $this->assertEquals(406, $response->getStatusCode());
     }
 
-    public function testAuraRouterOK()
+    public function testAuraRouterOK(): void
     {
         $router = new RouterContainer();
         $map = $router->getMap();
@@ -103,7 +103,7 @@ class AuraRouterTest extends TestCase
         $this->assertEquals('listUsers', (string) $response->getBody());
     }
 
-    public function testAuraRouterCustomAttribute()
+    public function testAuraRouterCustomAttribute(): void
     {
         $router = new RouterContainer();
         $map = $router->getMap();
@@ -123,7 +123,7 @@ class AuraRouterTest extends TestCase
         $this->assertEquals('listUsers', (string) $response->getBody());
     }
 
-    public function testAuraRouterAttributes()
+    public function testAuraRouterAttributes(): void
     {
         $router = new RouterContainer();
         $map = $router->getMap();
