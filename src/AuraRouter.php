@@ -43,6 +43,7 @@ class AuraRouter implements MiddlewareInterface
     public function attribute(string $attribute): self
     {
         $this->attribute = $attribute;
+
         return $this;
     }
 
