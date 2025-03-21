@@ -13,19 +13,13 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class AuraRouter implements MiddlewareInterface
 {
-    /**
-     * @var RouterContainer The router container
-     */
+    /** @var RouterContainer The router container */
     private $router;
 
-    /**
-     * @var string Attribute name for handler reference
-     */
+    /** @var string Attribute name for handler reference */
     private $attribute = 'request-handler';
 
-    /**
-     * @var ResponseFactoryInterface
-     */
+    /** @var ResponseFactoryInterface */
     private $responseFactory;
 
     /**
@@ -43,6 +37,7 @@ class AuraRouter implements MiddlewareInterface
     public function attribute(string $attribute): self
     {
         $this->attribute = $attribute;
+
         return $this;
     }
 
@@ -56,6 +51,10 @@ class AuraRouter implements MiddlewareInterface
 
         if (!$route) {
             $failedRoute = $matcher->getFailedRoute();
+
+            if (!$failedRoute) {
+                return $this->responseFactory->createResponse(500); // 500 INTERNAL SERVER ERROR
+            }
 
             switch ($failedRoute->failedRule) {
                 case 'Aura\Router\Rule\Allows':
