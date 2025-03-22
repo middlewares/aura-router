@@ -1,16 +1,14 @@
 # Change Log
-
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-
-## [2.1.1] - 2025-21-03
+## [2.1.1] - 2025-03-21
 ### Fixed
 - Added an check for failedRoute when false. This should be rare.
 
-## [2.1.0] - 2025-16-03
+## [2.1.0] - 2025-03-16
 ### Added
 - Support for PHP 8.1, 8.2, 8.3 and 8.4.
 
@@ -97,10 +95,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Use `Middlewares\Utils\CallableHandler` to resolve and execute the routes handlers. This fixes some issues resolving the callables.
 
-## 0.1.0 - 2016-10-02
+## [0.1.0] - 2016-10-02
 First version
 
-[2.1.0]: https://github.com/middlewares/aura-router/compare/v2.0.0...v2.1.0
+[2.1.1]: https://github.com/middlewares/aura-router/compare/v2.1.0...v2.1.1
+[2.1.0]: https://github.com/middlewares/aura-router/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/middlewares/aura-router/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/middlewares/aura-router/compare/v1.1.0...v2.0.0
 [1.1.0]: https://github.com/middlewares/aura-router/compare/v1.0.1...v1.1.0
@@ -115,3 +114,4 @@ First version
 [0.3.0]: https://github.com/middlewares/aura-router/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/middlewares/aura-router/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/middlewares/aura-router/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/middlewares/aura-router/releases/tag/v0.1.0
