@@ -104,7 +104,7 @@ class AuraRouterTest extends TestCase
         $this->assertEquals('listUsers', (string) $response->getBody());
     }
 
-    public function testHandlerConfigDefaults(): void
+    public function testHandlerAttributeDefaults(): void
     {
         $router = new RouterContainer();
         $map = $router->getMap();
@@ -124,7 +124,7 @@ class AuraRouterTest extends TestCase
         $this->assertEquals('listUsers', (string) $response->getBody());
     }
 
-    public function testHandlerConfigIsCustomizable(): void
+    public function testHandlerAttributeIsCustomizable(): void
     {
         $router = new RouterContainer();
         $map = $router->getMap();
@@ -133,7 +133,7 @@ class AuraRouterTest extends TestCase
 
         $response = Dispatcher::run(
             [
-                (new AuraRouter($router))->handler('handler'),
+                (new AuraRouter($router))->handlerAttribute('handler'),
                 function ($request) {
                     echo $request->getAttribute('handler');
                 },
@@ -144,7 +144,7 @@ class AuraRouterTest extends TestCase
         $this->assertEquals('listUsers', (string) $response->getBody());
     }
 
-    public function testHandlerConfigWorksWithDeprecatedMethod(): void
+    public function testHandlerAttributeWorksWithDeprecatedMethod(): void
     {
         $router = new RouterContainer();
         $map = $router->getMap();
@@ -185,7 +185,7 @@ class AuraRouterTest extends TestCase
         );
     }
 
-    public function testRouteConfigIsCustomizable(): void
+    public function testRouteAttributeIsCustomizable(): void
     {
         $router = new RouterContainer();
         $map = $router->getMap();
@@ -194,7 +194,7 @@ class AuraRouterTest extends TestCase
 
         Dispatcher::run(
             [
-                (new AuraRouter($router))->route('custom-route'),
+                (new AuraRouter($router))->routeAttribute('custom-route'),
                 function ($request) use ($expectedRoute) {
                     $actualRoute = $request->getAttribute('custom-route');
 

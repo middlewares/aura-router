@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.2.0] - 2025-05-31
 ### Added
-- Support for new `route($name)` option which sets the attribute name that will hold the resolved Route instance.
+- Support for new `routeAttribute($name)` option which sets the attribute name that will hold the resolved Route instance.
 
 This allows setting parameters, `extras()` in our case, but it could also be that we just extended the Route class and we added new method or anything else that we would like to recover inside the Request Handler:
 
@@ -36,10 +36,10 @@ public function process(
 ```
 
 ### Changed
-- `attribute($name)` was used to set Request Handler's attribute name and the general feeling that it transmitted didn't fit anymore as there is now the `route()` method. So it was moved to a more specific `handler($name)` method.
+- `attribute($name)` was used to set Request Handler's attribute name and the general feeling that it transmitted didn't fit anymore as there is now the `routeAttribute($name)` method. So it was moved to a more specific `handlerAttribute($name)` method.
 
 ### Deprecated
-- The `attribute()` method is still there but marked as `@deprecated` so it will be removed in the next major release. Just use `handler()` instead.
+- The `attribute($name)` method is still there but marked as `@deprecated` so it will be removed in the next major release. Just use `handlerAttribute($name)` instead.
 
 
 ## [2.1.1] - 2025-03-21
@@ -60,7 +60,7 @@ public function process(
 
 ### Removed
 - Support for PHP 7.0 and 7.1
-- The `responseFactory()` option. Use the second argument in the contructor.
+- The `responseFactory()` option. Use the second argument in the constructor.
 
 ## [1.1.0] - 2018-08-04
 ### Added
