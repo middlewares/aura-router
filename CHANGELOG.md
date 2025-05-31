@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Support for new `route($name)` option which sets the attribute name that will hold the resolved Route instance.
 
-This allows doing things like this when defining the route:
+This allows settings new parameters or retrieves the existing ones:
 
 ```php
 $map->get('activities.get', '/activities', ListActivities::class)
