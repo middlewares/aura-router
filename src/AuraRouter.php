@@ -37,7 +37,7 @@ class AuraRouter implements MiddlewareInterface
 
     /**
      * Attribute name for route instance.
-     * This is used to get the route insntance of the resolved using $request->getAttribute($routeName)
+     * This is used to get the route instance of the resolved using $request->getAttribute($routeName)
      *
      * @var string
      */
@@ -123,7 +123,7 @@ class AuraRouter implements MiddlewareInterface
 
         $request = $request->withAttribute($this->handler, $route->handler)
             ->withAttribute($this->route, $route);
-        
+
         return $handler->handle($request);
     }
 }
