@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Support for new `route($name)` option which sets the attribute name that will hold the resolved Route instance.
 
-This allows setting parameters, `extras()` in our case but it could be that we just extended the Route class:
+This allows setting parameters, `extras()` in our case, but it could also be that we just extended the Route class and we added new method or anything else that we would like to recover inside the Request Handler:
 
 ```php
 $map->get('activities.get', '/activities', ListActivities::class)
