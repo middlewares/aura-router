@@ -13,14 +13,35 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class AuraRouter implements MiddlewareInterface
 {
-    /** @var RouterContainer The router container */
-    private $router;
+    /**
+     * The router container.
+     *
+     * @var RouterContainer
+     */
+    protected $router;
 
-    /** @var string Attribute name for handler reference */
-    private $attribute = 'request-handler';
+    /**
+     * Response factory to customize the response.
+     *
+     * @var ResponseFactoryInterface
+     */
+    protected $responseFactory;
 
-    /** @var ResponseFactoryInterface */
-    private $responseFactory;
+    /**
+     * Attribute name for handler reference.
+     * This is used to get the handler of a resolved route using $request->getAttribute($handlerName)
+     *
+     * @var string
+     */
+    protected $handler = 'request-handler';
+
+    /**
+     * Attribute name for route instance.
+     * This is used to get the route insntance of the resolved using $request->getAttribute($routeName)
+     *
+     * @var string
+     */
+    protected $route = 'route';
 
     /**
      * Set the RouterContainer instance.
@@ -33,10 +54,33 @@ class AuraRouter implements MiddlewareInterface
 
     /**
      * Set the attribute name to store handler reference.
+     *
+     * @deprecated Use handler() instead
+     * @see handler()
      */
     public function attribute(string $attribute): self
     {
-        $this->attribute = $attribute;
+        $this->handler = $attribute;
+
+        return $this;
+    }
+
+    /**
+     * Set the attribute name to store handler reference.
+     */
+    public function handler(string $handler): self
+    {
+        $this->handler = $handler;
+
+        return $this;
+    }
+
+    /**
+     * Set the attribute name to store the route instance.
+     */
+    public function route(string $route): self
+    {
+        $this->route = $route;
 
         return $this;
     }
@@ -77,8 +121,9 @@ class AuraRouter implements MiddlewareInterface
             $request = $request->withAttribute($name, $value);
         }
 
-        $request = $request->withAttribute($this->attribute, $route->handler);
-
+        $request = $request->withAttribute($this->handler, $route->handler)
+            ->withAttribute($this->route, $route);
+        
         return $handler->handle($request);
     }
 }
