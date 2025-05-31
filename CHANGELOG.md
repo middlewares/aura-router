@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Support for new `route($name)` option which sets the attribute name that will hold the resolved Route instance.
 
-This allows settings new parameters or retrieves the existing ones:
+This allows setting parameters, `extras()` in our case but it could be that we just extended the Route class:
 
 ```php
 $map->get('activities.get', '/activities', ListActivities::class)
@@ -17,7 +17,7 @@ $map->get('activities.get', '/activities', ListActivities::class)
      ]);
 ```
 
-And then retrieve them inside the request:
+And then we can access the Route instance like this:
 
 ```php
 public function process(
@@ -37,7 +37,9 @@ public function process(
 
 ### Changed
 - `attribute($name)` was used to set Request Handler's attribute name and the general feeling that it transmitted didn't fit anymore as there is now the `route()` method. So it was moved to a more specific `handler($name)` method.
-- The `attribute()` method is still there but marked as `@deprecated`.
+
+### Deprecated
+- The `attribute()` method is still there but marked as `@deprecated` so it will be removed in the next major release. Just use `handler()` instead.
 
 
 ## [2.1.1] - 2025-03-21
