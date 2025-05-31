@@ -84,26 +84,6 @@ class AuraRouterTest extends TestCase
         $this->assertEquals(406, $response->getStatusCode());
     }
 
-    public function testOK(): void
-    {
-        $router = new RouterContainer();
-        $map = $router->getMap();
-
-        $map->get('list', '/users', 'listUsers');
-
-        $response = Dispatcher::run(
-            [
-                new AuraRouter($router),
-                function ($request) {
-                    echo $request->getAttribute('request-handler');
-                },
-            ],
-            Factory::createServerRequest('GET', '/users')
-        );
-
-        $this->assertEquals('listUsers', (string) $response->getBody());
-    }
-
     public function testHandlerAttributeDefaults(): void
     {
         $router = new RouterContainer();
@@ -178,7 +158,6 @@ class AuraRouterTest extends TestCase
                     $actualRoute = $request->getAttribute('route');
 
                     Assert::assertEquals($expectedRoute, $actualRoute);
-                    ;
                 },
             ],
             Factory::createServerRequest('GET', '/users')
@@ -199,7 +178,6 @@ class AuraRouterTest extends TestCase
                     $actualRoute = $request->getAttribute('custom-route');
 
                     Assert::assertEquals($expectedRoute, $actualRoute);
-                    ;
                 },
             ],
             Factory::createServerRequest('GET', '/users')
