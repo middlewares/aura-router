@@ -29,7 +29,7 @@ class AuraRouter implements MiddlewareInterface
 
     /**
      * Attribute name for handler reference.
-     * This is used to get the handler of a resolved route using $request->getAttribute($handlerName)
+     * This is used to get the handler of the selected route using $request->getAttribute($handlerAttribute)
      *
      * @var string
      */
@@ -37,7 +37,7 @@ class AuraRouter implements MiddlewareInterface
 
     /**
      * Attribute name for route instance.
-     * This is used to get the route instance of the resolved using $request->getAttribute($routeName)
+     * This is used to get the selected route instance using $request->getAttribute($routeAttribute)
      *
      * @var string
      */

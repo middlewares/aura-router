@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace Middlewares\Tests;
 
+use Aura\Router\Route;
 use Aura\Router\RouterContainer;
 use Middlewares\AuraRouter;
 use Middlewares\Utils\Dispatcher;
@@ -155,6 +156,7 @@ class AuraRouterTest extends TestCase
             [
                 new AuraRouter($router),
                 function ($request) use ($expectedRoute) {
+                    /** @var Route $actualRoute */
                     $actualRoute = $request->getAttribute('route');
 
                     Assert::assertEquals($expectedRoute, $actualRoute);
@@ -175,6 +177,7 @@ class AuraRouterTest extends TestCase
             [
                 (new AuraRouter($router))->routeAttribute('custom-route'),
                 function ($request) use ($expectedRoute) {
+                    /** @var Route $actualRoute */
                     $actualRoute = $request->getAttribute('custom-route');
 
                     Assert::assertEquals($expectedRoute, $actualRoute);
