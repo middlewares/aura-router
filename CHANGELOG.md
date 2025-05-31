@@ -4,9 +4,45 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.2.0] - 2025-05-31
+### Added
+- Support for new `route($name)` option which sets the attribute name that will hold the resolved Route instance.
+
+This allows doing things like this when defining the route:
+
+```php
+$map->get('activities.get', '/activities', ListActivities::class)
+    ->extras([
+        'key' => 'value'
+     ]);
+```
+
+And then retrieve them inside the request:
+
+```php
+public function process(
+    ServerRequestInterface $request,
+    RequestHandlerInterface $handler
+): ResponseInterface {
+    // the resolve Route instance
+    $route = $request->getAttribute('route');
+
+    // "value"
+    $route->extras['key'];
+    
+    // "activities.get"
+    $route->name;
+}
+```
+
+### Changed
+- `attribute($name)` was used to set Request Handler's attribute name and the general feeling that it transmitted didn't fit anymore as there is now the `route()` method. So it was moved to a more specific `handler($name)` method.
+- The `attribute()` method is still there but marked as `@deprecated`.
+
+
 ## [2.1.1] - 2025-03-21
 ### Fixed
-- Added an check for failedRoute when false. This should be rare.
+- Added a check for failedRoute when false. This should be rare.
 
 ## [2.1.0] - 2025-03-16
 ### Added
@@ -98,6 +134,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.1.0] - 2016-10-02
 First version
 
+[2.2.0]: https://github.com/middlewares/aura-router/compare/v2.1.1...v2.2.0
 [2.1.1]: https://github.com/middlewares/aura-router/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/middlewares/aura-router/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/middlewares/aura-router/compare/v2.0.0...v2.0.1
