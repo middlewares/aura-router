@@ -26,23 +26,23 @@ composer require middlewares/aura-router
 In this example, we are using [middleware/request-handler](https://github.com/middlewares/request-handler) to execute the route handler:
 
 ```php
-//Create the router
+// Create the router
 $router = new Aura\Router\RouterContainer();
 
 $map = $router->getMap();
 
 $map->get('hello', '/hello/{name}', function ($request) {
 
-    //The route parameters are stored as attributes
+    // The route parameters are mapped to attributes
     $name = $request->getAttribute('name');
 
-    //You can echo the output (it will be captured and writted into the body)
+    // You can echo the output (it will be captured and wrote into the body)
     echo sprintf('Hello %s', $name);
 
-    //Or return a string
+    // Or return a string
     return sprintf('Hello %s', $name);
 
-    //Or return a response
+    // Or return a response
     return new Response();
 });
 
@@ -70,26 +70,23 @@ Optionally, you can provide a `Psr\Http\Message\ResponseFactoryInterface` as the
 
 ```php
 $routerContainer = new Aura\Router\RouterContainer();
-$responseFactory = new MyOwnResponseFactory();
-
-$route = new Middlewares\AuraRouter($routerContainer, $responseFactory);
-```
-
-### Options
-
-```php
-$router = new RouterContainer();
 $map = $router->getMap();
 $map->get('list', '/users', 'listUsers')->extras(
     'key' => 'value'
- ]);
+]);
+
+$optionalResponseFactory = new MyOwnResponseFactory();
+
+$middleware = new Middlewares\AuraRouter($routerContainer, $optionalResponseFactory);
 
 $dispatcher = new Dispatcher([
     // Hold the resolved route handler reference in an attribute called "handler"
-    (new Middlewares\AuraRouter($routerContainer))->hadlerAttribute('handler'),
+    // (default: request-handler)
+    $middleware->hadlerAttribute('handler'),
        
-    // Hold Aura's resolved route instance in an attribute called "route"
-    (new Middlewares\AuraRouter($routerContainer))->routeAttribute('route'),
+    // Hold Aura's resolved route instance in an attribute called "aura-route"
+    // (default: route)
+    $middleware->routeAttribute('aura-route'),
 
     // Execute the route handler
     (new Middlewares\RequestHandler())->hadlerAttribute('handler')
