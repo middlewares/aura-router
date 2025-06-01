@@ -102,10 +102,10 @@ public function process(
     ServerRequestInterface $request,
     RequestHandlerInterface $handler
 ): ResponseInterface {
-    /** @var string $handler This returns 'listUsers' */
+    /** @var string $handler this returns 'listUsers' */
     $handler = $request->getAttribute('handler');
     
-    /** @var Route $actualRoute The resolved Route instance */
+    /** @var Route $actualRoute this returns resolved Route instance */
     $route = $request->getAttribute('route');
     
     // this returns "value" (previously set in extras())
