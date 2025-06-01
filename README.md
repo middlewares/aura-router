@@ -106,7 +106,7 @@ public function process(
     /** @var Route $route this returns the resolved Route instance */
     $route = $request->getAttribute('route');
     
-    // example to retrieve the previously set extra key/value "value" (previously set in extras())
+    // example to retrieve the previously set extra key/value "value"
     $route->extras['key'];
     
     // example to retrieve the route name "list"
