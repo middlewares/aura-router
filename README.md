@@ -54,7 +54,7 @@ $dispatcher = new Dispatcher([
 $response = $dispatcher->dispatch(new ServerRequest('/hello/world'));
 ```
 
-**Aura.Router** allows to define anything as the router handler (a closure, callback, action object, controller class, etc). The middleware will store this handler in a request attribute.
+**Aura.Router** allows to define anything as the router handler (a closure, callback, action object, controller class, etc.). The middleware will store this handler in a request attribute.
 
 ## Usage
 
@@ -82,14 +82,14 @@ $middleware = new Middlewares\AuraRouter($routerContainer, $optionalResponseFact
 $dispatcher = new Dispatcher([
     // Hold the resolved route handler reference in an attribute called "handler"
     // (default: request-handler)
-    $middleware->hadlerAttribute('handler'),
+    $middleware->handlerAttribute('handler'),
        
     // Hold Aura's resolved route instance in an attribute called "aura-route"
     // (default: route)
     $middleware->routeAttribute('aura-route'),
 
     // Execute the route handler
-    (new Middlewares\RequestHandler())->hadlerAttribute('handler')
+    (new Middlewares\RequestHandler())->handlerAttribute('handler')
 ]);
 
 // then, inside our Request Handler or Middleware
@@ -101,7 +101,7 @@ public function process(
     $handler = $request->getAttribute('handler');
     
     /** @var Route $route this returns the resolved Route instance */
-    $route = $request->getAttribute('route');
+    $route = $request->getAttribute('aura-route');
     
     // example to retrieve the previously set extra key/value "value"
     $route->extras['key'];
