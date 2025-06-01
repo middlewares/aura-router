@@ -53,9 +53,9 @@ class AuraRouter implements MiddlewareInterface
     }
 
     /**
-     * Set the attribute name to store handler reference.
+     * (DEPRECATED) Set the attribute name to store handler reference..
      *
-     * @deprecated Use handler() instead
+     * @deprecated Use handlerAttribute() instead
      * @see handlerAttribute()
      */
     public function attribute(string $attribute): self
