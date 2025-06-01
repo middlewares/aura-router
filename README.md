@@ -80,13 +80,40 @@ $route = new Middlewares\AuraRouter($routerContainer, $responseFactory);
 The name of the server request attribute used to save the handler. The default value is `request-handler`.
 
 ```php
-$dispatcher = new Dispatcher([
-    //Save the route handler in an attribute called "route"
-    (new Middlewares\AuraRouter($routerContainer))->attribute('route'),
+$router = new RouterContainer();
+$map = $router->getMap();
+$map->get('list', '/users', 'listUsers')->extras(
+    'key' => 'value'
+ ]);
 
-    //Execute the route handler
-    (new Middlewares\RequestHandler())->attribute('route')
+$dispatcher = new Dispatcher([
+    // Holds the route handler reference in an attribute called "handler"
+    (new Middlewares\AuraRouter($routerContainer))->hadlerAttribute('handler'),
+       
+    // Holds Aura's route instance in an attribute called "route"
+    (new Middlewares\AuraRouter($routerContainer))->routeAttribute('route'),
+
+    // Execute the route handler
+    (new Middlewares\RequestHandler())->hadlerAttribute('handler')
 ]);
+
+// then, inside our Request Handler or Middleware
+public function process(
+    ServerRequestInterface $request,
+    RequestHandlerInterface $handler
+): ResponseInterface {
+    /** @var string $handler This returns 'listUsers' */
+    $handler = $request->getAttribute('handler');
+    
+    /** @var Route $actualRoute The resolved Route instance */
+    $route = $request->getAttribute('route');
+    
+    // this returns "value" (previously set in extras())
+    $route->extras['key'];
+    
+    // this returns "list"
+    $route->name;
+}
 ```
 
 ---

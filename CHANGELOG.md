@@ -27,9 +27,6 @@ public function process(
     /** @var Route $actualRoute The resolved Route instance */
     $route = $request->getAttribute('route');
     
-    // this can also be used to get the handler reference
-    $route->handler;
-
     // "value"
     $route->extras['key'];
     
