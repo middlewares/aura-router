@@ -4,9 +4,50 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.2.0] - 2025-05-31
+### Added
+- Support for new `routeAttribute($name)` option which sets the attribute name that will hold the resolved Route instance.
+
+This allows setting parameters, `extras()` in our case, but it could also be that we just extended the Route class and we added new method or anything else that we would like to recover inside the Request Handler:
+
+```php
+$map->get('activities.get', '/activities', ListActivities::class)
+    ->extras([
+        'key' => 'value'
+     ]);
+```
+
+And then we can access the Route instance like this:
+
+```php
+public function process(
+    ServerRequestInterface $request,
+    RequestHandlerInterface $handler
+): ResponseInterface {
+    /** @var Route $actualRoute The resolved Route instance */
+    $route = $request->getAttribute('route');
+    
+    // this can also be used to get the handler reference
+    $route->handler;
+
+    // "value"
+    $route->extras['key'];
+    
+    // "activities.get"
+    $route->name;
+}
+```
+
+### Changed
+- `attribute($name)` was used to set Request Handler's attribute name and the general feeling that it transmitted didn't fit anymore as there is now the `routeAttribute($name)` method. So it was moved to a more specific `handlerAttribute($name)` method.
+
+### Deprecated
+- The `attribute($name)` method is still there but marked as `@deprecated` so it will be removed in the next major release. Just use `handlerAttribute($name)` instead.
+
+
 ## [2.1.1] - 2025-03-21
 ### Fixed
-- Added an check for failedRoute when false. This should be rare.
+- Added a check for failedRoute when false. This should be rare.
 
 ## [2.1.0] - 2025-03-16
 ### Added
@@ -22,7 +63,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Removed
 - Support for PHP 7.0 and 7.1
-- The `responseFactory()` option. Use the second argument in the contructor.
+- The `responseFactory()` option. Use the second argument in the constructor.
 
 ## [1.1.0] - 2018-08-04
 ### Added
@@ -98,6 +139,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.1.0] - 2016-10-02
 First version
 
+[2.2.0]: https://github.com/middlewares/aura-router/compare/v2.1.1...v2.2.0
 [2.1.1]: https://github.com/middlewares/aura-router/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/middlewares/aura-router/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/middlewares/aura-router/compare/v2.0.0...v2.0.1

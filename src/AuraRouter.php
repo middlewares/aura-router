@@ -13,14 +13,35 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class AuraRouter implements MiddlewareInterface
 {
-    /** @var RouterContainer The router container */
-    private $router;
+    /**
+     * The router container.
+     *
+     * @var RouterContainer
+     */
+    protected $router;
 
-    /** @var string Attribute name for handler reference */
-    private $attribute = 'request-handler';
+    /**
+     * Response factory to customize the response.
+     *
+     * @var ResponseFactoryInterface
+     */
+    protected $responseFactory;
 
-    /** @var ResponseFactoryInterface */
-    private $responseFactory;
+    /**
+     * Attribute name for handler reference.
+     * This is used to get the handler of the selected route using $request->getAttribute($handlerAttribute)
+     *
+     * @var string
+     */
+    protected $handlerAttribute = 'request-handler';
+
+    /**
+     * Attribute name for route instance.
+     * This is used to get the selected route instance using $request->getAttribute($routeAttribute)
+     *
+     * @var string
+     */
+    protected $routeAttribute = 'route';
 
     /**
      * Set the RouterContainer instance.
@@ -32,11 +53,34 @@ class AuraRouter implements MiddlewareInterface
     }
 
     /**
-     * Set the attribute name to store handler reference.
+     * (DEPRECATED) Set the attribute name to store handler reference..
+     *
+     * @deprecated Use handlerAttribute() instead
+     * @see handlerAttribute()
      */
     public function attribute(string $attribute): self
     {
-        $this->attribute = $attribute;
+        $this->handlerAttribute = $attribute;
+
+        return $this;
+    }
+
+    /**
+     * Set the attribute name to store handler reference.
+     */
+    public function handlerAttribute(string $handlerAttribute): self
+    {
+        $this->handlerAttribute = $handlerAttribute;
+
+        return $this;
+    }
+
+    /**
+     * Set the attribute name to store the route instance.
+     */
+    public function routeAttribute(string $routeAttribute): self
+    {
+        $this->routeAttribute = $routeAttribute;
 
         return $this;
     }
@@ -77,7 +121,8 @@ class AuraRouter implements MiddlewareInterface
             $request = $request->withAttribute($name, $value);
         }
 
-        $request = $request->withAttribute($this->attribute, $route->handler);
+        $request = $request->withAttribute($this->handlerAttribute, $route->handler)
+            ->withAttribute($this->routeAttribute, $route);
 
         return $handler->handle($request);
     }
