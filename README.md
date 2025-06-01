@@ -5,7 +5,7 @@
 ![Testing][ico-ga]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-Middleware to use [Aura.Router](https://github.com/auraphp/Aura.Router/) and store the route handler in a request attribute.
+Middleware to use [Aura.Router](https://github.com/auraphp/Aura.Router/) with a few more extras.
 
 ## Requirements
 
