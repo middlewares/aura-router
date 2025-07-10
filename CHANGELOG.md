@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.2.1] - 2025-07-10
+### Fixed
+- Rename 500 to 404 status code when no routes were defined.
+
+Before, this would return 500 (no routes defined in RouteContainer). But not defining any route should just mean 404.
+
+```php
+$router = new RouterContainer();
+
+$response = Dispatcher::run(
+    [
+        new AuraRouter($router),
+    ],
+    Factory::createServerRequest('GET', '/posts')
+);
+
+$this->assertEquals(404, $response->getStatusCode());
+```
+
 ## [2.2.0] - 2025-05-31
 ### Added
 - Support for new `routeAttribute($name)` option which sets the attribute name that will hold the resolved Route instance.
@@ -40,7 +59,6 @@ public function process(
 
 ### Deprecated
 - The `attribute($name)` method is still there but marked as `@deprecated` so it will be removed in the next major release. Just use `handlerAttribute($name)` instead.
-
 
 ## [2.1.1] - 2025-03-21
 ### Fixed
@@ -136,6 +154,7 @@ public function process(
 ## [0.1.0] - 2016-10-02
 First version
 
+[2.2.1]: https://github.com/middlewares/aura-router/compare/v2.2.0...v2.2.1
 [2.2.0]: https://github.com/middlewares/aura-router/compare/v2.1.1...v2.2.0
 [2.1.1]: https://github.com/middlewares/aura-router/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/middlewares/aura-router/compare/v2.0.1...v2.1.0

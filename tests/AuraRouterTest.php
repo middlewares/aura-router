@@ -50,6 +50,20 @@ class AuraRouterTest extends TestCase
         $this->assertEquals(404, $response->getStatusCode());
     }
 
+    public function testNotFoundOnEmptyRoutes(): void
+    {
+        $router = new RouterContainer();
+
+        $response = Dispatcher::run(
+            [
+                new AuraRouter($router),
+            ],
+            Factory::createServerRequest('GET', '/posts')
+        );
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+
     public function testNotAllowed(): void
     {
         $router = new RouterContainer();

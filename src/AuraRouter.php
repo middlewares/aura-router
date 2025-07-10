@@ -97,7 +97,8 @@ class AuraRouter implements MiddlewareInterface
             $failedRoute = $matcher->getFailedRoute();
 
             if (!$failedRoute) {
-                return $this->responseFactory->createResponse(500); // 500 INTERNAL SERVER ERROR
+                // Happens when there isn't defined route
+                return $this->responseFactory->createResponse(404); // 404 NOT FOUND
             }
 
             switch ($failedRoute->failedRule) {
